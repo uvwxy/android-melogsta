@@ -1,23 +1,29 @@
 package de.uvwxy.melogsta;
 
+import java.util.LinkedList;
+
 public class Log {
-	private static boolean on = true;
+	private static boolean logAnything = true;
 
-	private static boolean logCat_println_On = true;
-	
-	private static boolean logCat_D_On = true;
-	private static boolean logCat_E_On = true;
-	private static boolean logCat_I_On = true;
-	private static boolean logCat_V_On = true;
-	private static boolean logCat_W_On = true;
-	private static boolean logCat_WTF_On = true;
+	private static LogTypeState logD = new LogTypeState();
+	private static LogTypeState logE = new LogTypeState();
+	private static LogTypeState logI = new LogTypeState();
+	private static LogTypeState logV = new LogTypeState();
+	private static LogTypeState logW = new LogTypeState();
+	private static LogTypeState logWTF = new LogTypeState();
+	private static LogTypeState logLine = new LogTypeState();
 
-	private static boolean notifications_D_On = true;
-	private static boolean notifications_E_On = true;
-	private static boolean notifications_I_On = true;
-	private static boolean notifications_V_On = true;
-	private static boolean notifications_W_On = true;
-	private static boolean notifications_WTF_On = true;
+	private static LogTypeState[] allLogs = { logD, logE, logI, logV, logW, logWTF, logLine };
+
+	public static void setAllLogToLogCat(boolean on) {
+		for (LogTypeState lts : allLogs)
+			lts.logToLogCat = on;
+	}
+
+	public static void setAllLogToHistory(boolean on) {
+		for (LogTypeState lts : allLogs)
+			lts.logToHistory = on;
+	}
 
 	/**
 	 * @see android.util.Log
@@ -27,11 +33,15 @@ public class Log {
 	 * @return
 	 */
 	public static int d(String tag, String msg) {
-		if (notifications_D_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logD.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_D_On) {
+		if (logD.logToLogCat) {
 			return android.util.Log.d(tag, msg);
 		} else {
 			return 0;
@@ -47,11 +57,15 @@ public class Log {
 	 * @return
 	 */
 	public static int d(String tag, String msg, Throwable tr) {
-		if (notifications_D_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logD.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_D_On) {
+		if (logD.logToLogCat) {
 			return android.util.Log.d(tag, msg, tr);
 		} else {
 			return 0;
@@ -66,11 +80,15 @@ public class Log {
 	 * @return
 	 */
 	public static int e(String tag, String msg) {
-		if (notifications_E_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logE.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_E_On) {
+		if (logE.logToLogCat) {
 			return android.util.Log.e(tag, msg);
 		} else {
 			return 0;
@@ -86,11 +104,15 @@ public class Log {
 	 * @return
 	 */
 	public static int e(String tag, String msg, Throwable tr) {
-		if (notifications_E_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logE.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_E_On) {
+		if (logE.logToLogCat) {
 			return android.util.Log.e(tag, msg, tr);
 		} else {
 			return 0;
@@ -104,6 +126,10 @@ public class Log {
 	 * @return
 	 */
 	public static String getStackTraceString(Throwable tr) {
+		if (!logAnything) {
+			return null;
+		}
+
 		return android.util.Log.getStackTraceString(tr);
 	}
 
@@ -115,11 +141,15 @@ public class Log {
 	 * @return
 	 */
 	public static int i(String tag, String msg) {
-		if (notifications_I_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logI.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_I_On) {
+		if (logI.logToLogCat) {
 			return android.util.Log.i(tag, msg);
 		} else {
 			return 0;
@@ -135,11 +165,15 @@ public class Log {
 	 * @return
 	 */
 	public static int i(String tag, String msg, Throwable tr) {
-		if (notifications_I_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logI.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_I_On) {
+		if (logI.logToLogCat) {
 			return android.util.Log.i(tag, msg, tr);
 		} else {
 			return 0;
@@ -154,6 +188,10 @@ public class Log {
 	 * @return
 	 */
 	public static boolean isLoggable(String tag, int level) {
+		if (!logAnything) {
+			return false;
+		}
+
 		return android.util.Log.isLoggable(tag, level);
 	}
 
@@ -166,8 +204,15 @@ public class Log {
 	 * @return
 	 */
 	public int println(int priority, String tag, String msg) {
+		if (!logAnything) {
+			return -1;
+		}
 
-		if (logCat_println_On) {
+		if (logLine.logToHistory) {
+			// TODO!
+		}
+
+		if (logLine.logToLogCat) {
 			return android.util.Log.println(priority, tag, msg);
 		}
 		return 0;
@@ -181,11 +226,15 @@ public class Log {
 	 * @return
 	 */
 	public static int v(String tag, String msg) {
-		if (notifications_V_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logV.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_V_On) {
+		if (logV.logToHistory) {
 			return android.util.Log.v(tag, msg);
 		} else {
 			return 0;
@@ -201,11 +250,15 @@ public class Log {
 	 * @return
 	 */
 	public static int v(String tag, String msg, Throwable tr) {
-		if (notifications_V_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logV.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_V_On) {
+		if (logV.logToLogCat) {
 			return android.util.Log.v(tag, msg, tr);
 		} else {
 			return 0;
@@ -220,11 +273,15 @@ public class Log {
 	 * @return
 	 */
 	public static int w(String tag, String msg) {
-		if (notifications_W_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logW.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_W_On) {
+		if (logW.logToLogCat) {
 			return android.util.Log.w(tag, msg);
 		} else {
 			return 0;
@@ -240,11 +297,15 @@ public class Log {
 	 * @return
 	 */
 	public static int w(String tag, String msg, Throwable tr) {
-		if (notifications_W_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logW.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_W_On) {
+		if (logW.logToLogCat) {
 			return android.util.Log.w(tag, msg, tr);
 		} else {
 			return 0;
@@ -259,11 +320,15 @@ public class Log {
 	 * @return
 	 */
 	public static int wtf(String tag, Throwable tr) {
-		if (notifications_WTF_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logWTF.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_WTF_On) {
+		if (logWTF.logToLogCat) {
 			return android.util.Log.wtf(tag, tr);
 		} else {
 			return 0;
@@ -278,11 +343,15 @@ public class Log {
 	 * @return
 	 */
 	public static int wtf(String tag, String msg) {
-		if (notifications_WTF_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logWTF.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_WTF_On) {
+		if (logWTF.logToLogCat) {
 			return android.util.Log.wtf(tag, msg);
 		} else {
 			return 0;
@@ -298,11 +367,15 @@ public class Log {
 	 * @return
 	 */
 	public static int wtf(String tag, String msg, Throwable tr) {
-		if (notifications_WTF_On) {
+		if (!logAnything) {
+			return -1;
+		}
+
+		if (logWTF.logToHistory) {
 			// TODO!
 		}
 
-		if (logCat_WTF_On) {
+		if (logWTF.logToLogCat) {
 			return android.util.Log.wtf(tag, msg, tr);
 		} else {
 			return 0;
