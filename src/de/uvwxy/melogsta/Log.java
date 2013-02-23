@@ -211,6 +211,14 @@ public class Log {
 		return addLine(logWTF, android.util.Log.ASSERT, tag, msg, null);
 	}
 
+	/**
+	 * @see android.util.Log
+	 * 
+	 * @param tag
+	 * @param msg
+	 * @param tr
+	 * @return
+	 */
 	public static int wtf(String tag, String msg, Throwable tr) {
 		return addLine(logWTF, android.util.Log.ASSERT, tag, msg, tr);
 	}
