@@ -34,6 +34,9 @@ public class Log {
 			lts.logHistory.add(new LogHistoryItem(priority, tag, msg, tr));
 		if (lts.logToLogCat)
 			return android.util.Log.println(priority, tag, msg);
+		if (lts.throwNotification){
+			
+		}
 		return 0;
 	}
 
