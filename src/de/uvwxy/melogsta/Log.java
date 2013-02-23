@@ -1,6 +1,5 @@
 package de.uvwxy.melogsta;
 
-import java.util.LinkedList;
 
 public class Log {
 	private static boolean logAnything = true;
