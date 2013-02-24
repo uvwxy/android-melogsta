@@ -3,7 +3,6 @@ package de.uvwxy.melogsta;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
