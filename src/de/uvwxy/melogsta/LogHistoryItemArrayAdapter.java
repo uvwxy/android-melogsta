@@ -42,7 +42,7 @@ public class LogHistoryItemArrayAdapter extends ArrayAdapter<LogHistoryItem> {
 		LogHistoryItem item = logList.get(position);
 
 		String line1 = item.getTag() != null ? item.getTag() : "[empty]";
-		line1 += ": " + getTimeString(item.getTimestamp());
+		line1 = getDateTime(context, item.getTimestamp()) + ": " + line1;
 		String line2 = item.getMsg() != null ? item.getMsg() : "[empty]";
 		tvLine1.setText(line1);
 		tvLine2.setText(line2);

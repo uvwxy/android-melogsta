@@ -87,7 +87,8 @@ public class ActivityShowLogs extends Activity {
 		String bugReport = "";
 
 		for (LogHistoryItem lhi : logHistoryList) {
-			bugReport += lhi.getTimestamp() + "," + lhi.getTag() + "," + lhi.getMsg() + "\n";
+			bugReport += lhi.getTimestamp() + ", " + getPriorityString(lhi.getPriority()) + ", " + lhi.getTag() + ", "
+					+ lhi.getMsg() + "\n";
 		}
 
 		Intent intentMail = new Intent(android.content.Intent.ACTION_SEND);
@@ -98,5 +99,24 @@ public class ActivityShowLogs extends Activity {
 		intentMail.putExtra(android.content.Intent.EXTRA_TEXT, bugReport);
 
 		startActivity(Intent.createChooser(intentMail, "Send bugreport..."));
+	}
+
+	private String getPriorityString(int priority) {
+		switch (priority) {
+		case android.util.Log.ASSERT:
+			return "ASSERT";
+		case android.util.Log.DEBUG:
+			return "DEBUG";
+		case android.util.Log.ERROR:
+			return "ERROR";
+		case android.util.Log.INFO:
+			return "INFO";
+		case android.util.Log.VERBOSE:
+			return "VERBOSE";
+		case android.util.Log.WARN:
+			return "WARN";
+		default:
+			return "" + priority;
+		}
 	}
 }

@@ -26,6 +26,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tvTag"
+        android:layout_marginLeft="8dp"
         android:text="TextView" />
 
 </RelativeLayout>
