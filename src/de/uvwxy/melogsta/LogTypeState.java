@@ -2,12 +2,13 @@ package de.uvwxy.melogsta;
 
 import java.util.LinkedList;
 
-public class LogTypeState {
+class LogTypeState {
 	// default visibility: only in package
 	boolean logToHistory = true;
 	boolean logToLogCat = true;
 	boolean throwNotification = true;
-	boolean notificationHasBeenThrown;
+	int ownNotificationID;
+	static int sharedNotificationID;
 	LinkedList<LogHistoryItem> logHistory = new LinkedList<LogHistoryItem>();
 
 }

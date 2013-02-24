@@ -2,4 +2,8 @@
 
     <string name="app_name">MeLogsta</string>
 
+    <string name="strGetLogs">Retreive Logs</string>
+
+    <string name="email">Send as Mail</string>
+
 </resources>

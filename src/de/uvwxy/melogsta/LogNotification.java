@@ -7,17 +7,19 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-public class LogNotification {
-	private NotificationManager nm = null;
+class LogNotification {
+	private static NotificationManager nm = null;
 
-	private void getNM(Context ctx) {
+	private static void getNM(Context ctx) {
 		if (ctx != null && nm == null) {
 			nm = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 	}
 
-	void notify(Context ctx, int priority, String message) {
-		int iconID = -1;
+	static void notify(Context ctx, int notificationID, int priority, String tag, String message) {
+		android.util.Log.i("MELOGSTA", "notify(...)");
+
+		int iconID = R.drawable.icon_line;
 		switch (priority) {
 		case android.util.Log.ASSERT:
 			iconID = R.drawable.icon_wtf;
@@ -40,13 +42,12 @@ public class LogNotification {
 		default:
 			iconID = R.drawable.icon_line;
 		}
-		
-		// TODO: handle multiple notification types and all notifications as one notification type
-		
-		updateNotification(ctx, notificationID, iconID, null, null);
+
+		updateNotification(ctx, notificationID, priority, iconID, ctx.getPackageName(), tag + ": " + message);
 	}
 
-	private void updateNotification(Context ctx, int notificationID, int iconID, String title, String contentText) {
+	private static void updateNotification(Context ctx, int notificationID, int priority, int iconID, String title,
+			String contentText) {
 		getNM(ctx);
 		if (nm == null)
 			return;
@@ -56,20 +57,22 @@ public class LogNotification {
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(ctx, ActivityShowLogs.class);
 
-		// The stack builder object will contain an artificial back stack for the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(ActivityShowLogs.class);
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
+		if (!Log.isCombinedNotification()) {
+			resultIntent.putExtra(Log.BUNDLE_EXTRA_INT_PRIORITY, priority);
+		}
 
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, resultIntent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+
 		mBuilder.setContentIntent(resultPendingIntent);
 
-		// mId allows you to update the notification later on.
 		nm.notify(notificationID, mBuilder.build());
+	}
+
+	public static void cancelNotification(Context ctx, int notificationID) {
+		getNM(ctx);
+		if (nm == null)
+			return;
+		nm.cancel(notificationID);
 	}
 }

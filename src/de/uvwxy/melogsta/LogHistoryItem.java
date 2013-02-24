@@ -1,9 +1,10 @@
 package de.uvwxy.melogsta;
 
-public class LogHistoryItem {
+class LogHistoryItem {
 	private int priority;
 	private String tag;
 	private String msg;
+	private long timestamp;
 	private Throwable tr;
 
 	public int getPriority() {
@@ -16,6 +17,10 @@ public class LogHistoryItem {
 
 	public String getMsg() {
 		return msg;
+	}
+	
+	public long getTimestamp(){
+		return timestamp;
 	}
 
 	public Throwable getTr() {
@@ -33,16 +38,21 @@ public class LogHistoryItem {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+	
+	public void setTimestamp(long timestamp){
+		this.timestamp = timestamp;
+	}
 
 	public void setTr(Throwable tr) {
 		this.tr = tr;
 	}
 
-	public LogHistoryItem(int priority, String tag, String msg, Throwable tr) {
+	public LogHistoryItem(int priority, String tag, String msg, long timestamp, Throwable tr) {
 		super();
 		this.priority = priority;
 		this.tag = tag;
 		this.msg = msg;
+		this.timestamp = timestamp;
 		this.tr = tr;
 	}
 }
