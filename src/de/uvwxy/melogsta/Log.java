@@ -113,6 +113,19 @@ public class Log {
 
 		combinedNotification = on;
 	}
+	
+	public static void disableAllNotifications(){
+		for (LogTypeState lts : allLogs) {
+			LogNotification.cancelNotification(ctx, lts.ownNotificationID);
+			lts.throwNotification = false;
+		}
+	}
+	
+	public static void enableAllNotifications(){
+		for (LogTypeState lts : allLogs) {
+			lts.throwNotification = true;
+		}
+	}
 
 	public static void setAllLogToLogCat(boolean on) {
 		for (LogTypeState lts : allLogs)
