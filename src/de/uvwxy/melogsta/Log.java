@@ -144,6 +144,37 @@ public class Log {
 	}
 
 	/**
+	 * @param priority
+	 * @return
+	 */
+	public static int getIconID(int priority) {
+		int iconID;
+		switch (priority) {
+		case android.util.Log.ASSERT:
+			iconID = R.drawable.icon_wtf;
+			break;
+		case android.util.Log.DEBUG:
+			iconID = R.drawable.icon_debug;
+			break;
+		case android.util.Log.ERROR:
+			iconID = R.drawable.icon_error;
+			break;
+		case android.util.Log.INFO:
+			iconID = R.drawable.icon_info;
+			break;
+		case android.util.Log.VERBOSE:
+			iconID = R.drawable.icon_verbose;
+			break;
+		case android.util.Log.WARN:
+			iconID = R.drawable.icon_warn;
+			break;
+		default:
+			iconID = R.drawable.icon_line;
+		}
+		return iconID;
+	}
+
+	/**
 	 * @see android.util.Log
 	 * 
 	 * @param tag
@@ -209,8 +240,6 @@ public class Log {
 	 * @return
 	 */
 	public static int i(String tag, String msg) {
-		android.util.Log.i("MELOGSTA", "i(...)");
-
 		return addLine(logI, android.util.Log.INFO, tag, msg, null);
 	}
 

@@ -48,7 +48,9 @@ public class LogHistoryItemArrayAdapter extends ArrayAdapter<LogHistoryItem> {
 		tvLine2.setText(line2);
 
 		r = context.getResources();
-		ivIcon.setImageBitmap(BitmapFactory.decodeResource(r, R.drawable.icon_info));
+
+		int iconID = Log.getIconID(item.getPriority());
+		ivIcon.setImageBitmap(BitmapFactory.decodeResource(r, iconID));
 
 		return entry;
 	}

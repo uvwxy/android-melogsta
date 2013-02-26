@@ -16,32 +16,7 @@ class LogNotification {
 	}
 
 	static void notify(Context ctx, int notificationID, int priority, String tag, String message) {
-		android.util.Log.i("MELOGSTA", "notify(...)");
-
-		int iconID = R.drawable.icon_line;
-		switch (priority) {
-		case android.util.Log.ASSERT:
-			iconID = R.drawable.icon_wtf;
-			break;
-		case android.util.Log.DEBUG:
-			iconID = R.drawable.icon_debug;
-			break;
-		case android.util.Log.ERROR:
-			iconID = R.drawable.icon_error;
-			break;
-		case android.util.Log.INFO:
-			iconID = R.drawable.icon_info;
-			break;
-		case android.util.Log.VERBOSE:
-			iconID = R.drawable.icon_verbose;
-			break;
-		case android.util.Log.WARN:
-			iconID = R.drawable.icon_warn;
-			break;
-		default:
-			iconID = R.drawable.icon_line;
-		}
-
+		int iconID = Log.getIconID(priority);
 		updateNotification(ctx, notificationID, priority, iconID, ctx.getPackageName(), tag + ": " + message);
 	}
 
@@ -60,7 +35,7 @@ class LogNotification {
 			resultIntent.putExtra(Log.BUNDLE_EXTRA_INT_PRIORITY, priority);
 		}
 
-		PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, resultIntent,
+		PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, notificationID, resultIntent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
 
 		mBuilder.setContentIntent(resultPendingIntent);
