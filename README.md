@@ -1,5 +1,6 @@
 MeLogsta
-        :::java
+
+        
         // import de.uvwxy.melogsta.Log instead of android.util.Log
         
         // set the Context in your Activity/Service/..
