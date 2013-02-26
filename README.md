@@ -20,3 +20,8 @@ MeLogsta
         
         // Set your email adress for "Send Mail" bugreport button
         Log.setEmailAddress("code@uvwxy.de")
+
+
+IMPORTANT: Add the Activity to your embedding manifest:
+        <activity android:name="de.uvwxy.melogsta.ActivityShowLogs"></activity>
+
