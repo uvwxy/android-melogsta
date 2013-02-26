@@ -23,5 +23,6 @@ MeLogsta
 
 
 IMPORTANT: Add the Activity to your embedding manifest:
+
         <activity android:name="de.uvwxy.melogsta.ActivityShowLogs"></activity>
 
