@@ -1,10 +1,13 @@
 package de.uvwxy.melogsta;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,6 +38,8 @@ public class ActivityShowLogs extends Activity {
 		}
 
 	};
+	private int priority;
+	private int remotePID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,41 +50,45 @@ public class ActivityShowLogs extends Activity {
 		defaultListView = (ListView) findViewById(R.id.lvDefault);
 		logHistoryList = new ArrayList<LogHistoryItem>();
 
-		int priority;
-		if (Log.isCombinedNotification()) {
-			for (LogTypeState lts : Log.getAllLogs()) {
-				logHistoryList.addAll(lts.logHistory);
-			}
-		} else if ((priority = getIntent().getIntExtra(Log.BUNDLE_EXTRA_INT_PRIORITY, -1337)) != -1337) {
-
-			switch (priority) {
-			case android.util.Log.ASSERT:
-				logHistoryList.addAll(Log.getLogWTF().logHistory);
-				break;
-			case android.util.Log.DEBUG:
-				logHistoryList.addAll(Log.getLogD().logHistory);
-				break;
-			case android.util.Log.ERROR:
-				logHistoryList.addAll(Log.getLogE().logHistory);
-				break;
-			case android.util.Log.INFO:
-				logHistoryList.addAll(Log.getLogI().logHistory);
-				break;
-			case android.util.Log.VERBOSE:
-				logHistoryList.addAll(Log.getLogV().logHistory);
-				break;
-			case android.util.Log.WARN:
-				logHistoryList.addAll(Log.getLogW().logHistory);
-				break;
-			default:
-				logHistoryList.addAll(Log.getLogLine().logHistory);
-			}
-		}
+		priority = getIntent().getIntExtra(Log.BUNDLE_EXTRA_INT_PRIORITY, -1337);
+		remotePID = getIntent().getIntExtra(Log.BUNDLE_EXTRA_INT_PID, android.os.Process.myPid());
 
 		defaultArrayAdapter = new LogHistoryItemArrayAdapter(this, getLayoutInflater(), R.id.lvDefault, logHistoryList);
 		defaultListView.setAdapter(defaultArrayAdapter);
 		defaultListView.setOnItemClickListener(defaultListOnItemOnClickHandler);
 		defaultListView.setOnItemLongClickListener(defaultListOnItemLongClickHandler);
+
+		readLogs();
+	}
+
+	public void refreshLogs(View v) {
+		readLogs();
+	}
+
+	private void readLogs() {
+		boolean localLog = android.os.Process.myPid() == remotePID;
+
+		if (localLog) {
+			Log.getLocalLog(priority, logHistoryList);
+		} else {
+			getRemoteLogs(priority, remotePID, logHistoryList);
+		}
+
+		defaultArrayAdapter.notifyDataSetChanged();
+		android.util.Log.i("MELOGSTA", "LogHistory size. " + logHistoryList.size() + " priority = " + priority);
+	}
+
+	private void getRemoteLogs(int priority, int pid, ArrayList<LogHistoryItem> logHistoryList) {
+		SocketIPCClient client = new SocketIPCClient(priority, pid);
+		ArrayList<LogHistoryItem> remoteList = client.getRemoteLogList();
+
+		if (remoteList != null) {
+			logHistoryList.clear();
+			logHistoryList.addAll(remoteList);
+			android.util.Log.i("MELOGSTA", "Read " + remoteList.size() + " entries");
+		} else {
+			android.util.Log.i("MELOGSTA", "Read null object");
+		}
 	}
 
 	public void sendMail(View v) {

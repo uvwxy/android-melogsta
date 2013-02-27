@@ -17,7 +17,7 @@ class LogNotification {
 
 	static void notify(Context ctx, int notificationID, int priority, String tag, String message) {
 		if (ctx == null) {
-			android.util.Log.d("MELOGSTA", "Context was NULL!");
+			android.util.Log.i("MELOGSTA", "Context was NULL!");
 			return;
 		}
 		int iconID = Log.getIconID(priority);
@@ -38,6 +38,7 @@ class LogNotification {
 		if (!Log.isCombinedNotification()) {
 			resultIntent.putExtra(Log.BUNDLE_EXTRA_INT_PRIORITY, priority);
 		}
+		resultIntent.putExtra(Log.BUNDLE_EXTRA_INT_PID, android.os.Process.myPid());
 
 		PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, notificationID, resultIntent,
 				PendingIntent.FLAG_CANCEL_CURRENT);

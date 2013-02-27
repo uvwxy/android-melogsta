@@ -6,4 +6,6 @@
 
     <string name="email">Send as Mail</string>
 
+    <string name="strRefresh">Refresh</string>
+
 </resources>

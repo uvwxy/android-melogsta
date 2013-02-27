@@ -21,4 +21,13 @@
         android:layout_alignParentTop="true" >
     </ListView>
 
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:onClick="refreshLogs"
+        android:text="@string/strRefresh" />
+
 </RelativeLayout>

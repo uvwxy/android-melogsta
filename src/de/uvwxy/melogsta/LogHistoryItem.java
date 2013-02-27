@@ -1,6 +1,10 @@
 package de.uvwxy.melogsta;
 
-class LogHistoryItem {
+import java.io.Serializable;
+
+class LogHistoryItem implements Serializable {
+	private static final long serialVersionUID = 4591651302918734176L;
+
 	private int priority;
 	private String tag;
 	private String msg;
@@ -18,8 +22,8 @@ class LogHistoryItem {
 	public String getMsg() {
 		return msg;
 	}
-	
-	public long getTimestamp(){
+
+	public long getTimestamp() {
 		return timestamp;
 	}
 
@@ -38,8 +42,8 @@ class LogHistoryItem {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	
-	public void setTimestamp(long timestamp){
+
+	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
 

@@ -1,9 +1,12 @@
 package de.uvwxy.melogsta;
 
+import java.util.List;
+
 import android.content.Context;
 
 public class Log {
 	static final String BUNDLE_EXTRA_INT_PRIORITY = "priority";
+	static final String BUNDLE_EXTRA_INT_PID = "logPid";
 
 	private static String emailAddress = "code@uvwxy.de";
 
@@ -22,6 +25,8 @@ public class Log {
 	private static LogTypeState logLine = new LogTypeState();
 
 	private static LogTypeState[] allLogs = { logD, logE, logI, logV, logW, logWTF, logLine };
+	private static SocketIPCServer server;
+	private static Thread serverThread;
 
 	static {
 		// setup shared and own notification ids:
@@ -113,15 +118,15 @@ public class Log {
 
 		combinedNotification = on;
 	}
-	
-	public static void disableAllNotifications(){
+
+	public static void disableAllNotifications() {
 		for (LogTypeState lts : allLogs) {
 			LogNotification.cancelNotification(ctx, lts.ownNotificationID);
 			lts.throwNotification = false;
 		}
 	}
-	
-	public static void enableAllNotifications(){
+
+	public static void enableAllNotifications() {
 		for (LogTypeState lts : allLogs) {
 			lts.throwNotification = true;
 		}
@@ -137,20 +142,79 @@ public class Log {
 			lts.logToHistory = on;
 	}
 
+	public static void startIPCServer() {
+		android.util.Log.i("MELOGSTA", "Starting IPCServer");
+		server = new SocketIPCServer(android.os.Process.myPid());
+		serverThread = new Thread(server);
+		serverThread.start();
+	}
+
+	public static void stopIPCServer() {
+		android.util.Log.i("MELOGSTA", "Stopping IPCServer");
+		if (server != null) {
+			server.stop();
+			serverThread.interrupt();
+		}
+	}
+
+	public static void getLocalLog(int priority, List<LogHistoryItem> logHistoryList) {
+		if (isCombinedNotification()) {
+			for (LogTypeState lts : Log.getAllLogs()) {
+				logHistoryList.addAll(lts.logHistory);
+			}
+		} else {
+			switch (priority) {
+			case android.util.Log.ASSERT:
+				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogWTF().logHistory.size());
+				logHistoryList.addAll(Log.getLogWTF().logHistory);
+				break;
+			case android.util.Log.DEBUG:
+				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogD().logHistory.size());
+				logHistoryList.addAll(Log.getLogD().logHistory);
+				break;
+			case android.util.Log.ERROR:
+				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogE().logHistory.size());
+				logHistoryList.addAll(Log.getLogE().logHistory);
+				break;
+			case android.util.Log.INFO:
+				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogI().logHistory.size());
+				logHistoryList.addAll(Log.getLogI().logHistory);
+				break;
+			case android.util.Log.VERBOSE:
+				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogV().logHistory.size());
+				logHistoryList.addAll(Log.getLogV().logHistory);
+				break;
+			case android.util.Log.WARN:
+				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogW().logHistory.size());
+				logHistoryList.addAll(Log.getLogW().logHistory);
+				break;
+			default:
+				logHistoryList.addAll(Log.getLogLine().logHistory);
+			}
+		}
+	}
+
 	private static int addLine(LogTypeState lts, int priority, String tag, String msg, Throwable tr) {
 		if (!logAnything) {
 			return -1;
 		}
 
-		if (lts == null)
+		if (lts == null) {
+			android.util.Log.i("MELOGSTA", "LTS == null, prio = " + priority);
 			return -1;
+		}
 
 		if (lts.throwNotification) {
 			LogNotification.notify(ctx, combinedNotification ? LogTypeState.sharedNotificationID
 					: lts.ownNotificationID, priority, tag, msg);
 		}
-		if (lts.logHistory != null && lts.logToHistory)
+		if (lts.logHistory != null && lts.logToHistory) {
+			android.util.Log.i("MELOGSTA", "adding (" + priority + ") " + tag + ", " + msg);
 			lts.logHistory.add(new LogHistoryItem(priority, tag, msg, System.currentTimeMillis(), tr));
+		} else {
+			android.util.Log.i("MELOGSTA", "LogHistory is null? = " + (lts.logHistory == null) + "priority = "
+					+ priority);
+		}
 		if (lts.logToLogCat)
 			return android.util.Log.println(priority, tag, msg);
 		return 0;
