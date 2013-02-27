@@ -36,3 +36,12 @@ IMPORTANT: Add the Activity to your embedding manifest:
 
         <activity android:name="de.uvwxy.melogsta.ActivityShowLogs"></activity>
 
+When Using this library with a service use:
+	
+	// start the background socket listener
+	Log.startIPCServer()
+
+	// and don't forget to stop the background socket listener
+	Log.stopIPCServer()
+
+	// See commit d1bdf19bc95aef00f1a0c799b2f791a8579f48d6 for details
