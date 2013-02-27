@@ -1,13 +1,10 @@
 package de.uvwxy.melogsta;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -75,7 +72,6 @@ public class ActivityShowLogs extends Activity {
 		}
 
 		defaultArrayAdapter.notifyDataSetChanged();
-		android.util.Log.i("MELOGSTA", "LogHistory size. " + logHistoryList.size() + " priority = " + priority);
 	}
 
 	private void getRemoteLogs(int priority, int pid, ArrayList<LogHistoryItem> logHistoryList) {

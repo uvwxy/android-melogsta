@@ -143,14 +143,12 @@ public class Log {
 	}
 
 	public static void startIPCServer() {
-		android.util.Log.i("MELOGSTA", "Starting IPCServer");
 		server = new SocketIPCServer(android.os.Process.myPid());
 		serverThread = new Thread(server);
 		serverThread.start();
 	}
 
 	public static void stopIPCServer() {
-		android.util.Log.i("MELOGSTA", "Stopping IPCServer");
 		if (server != null) {
 			server.stop();
 			serverThread.interrupt();
@@ -158,6 +156,7 @@ public class Log {
 	}
 
 	public static void getLocalLog(int priority, List<LogHistoryItem> logHistoryList) {
+		logHistoryList.clear();
 		if (isCombinedNotification()) {
 			for (LogTypeState lts : Log.getAllLogs()) {
 				logHistoryList.addAll(lts.logHistory);
@@ -194,7 +193,6 @@ public class Log {
 		}
 
 		if (lts == null) {
-			android.util.Log.i("MELOGSTA", "LTS == null, prio = " + priority);
 			return -1;
 		}
 
