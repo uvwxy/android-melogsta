@@ -17,7 +17,7 @@ class LogNotification {
 
 	static void notify(Context ctx, int notificationID, int priority, String tag, String message) {
 		if (ctx == null) {
-			android.util.Log.i("MELOGSTA", "Context was NULL!");
+			android.util.Log.e("MELOGSTA", "Context was NULL!");
 			return;
 		}
 		int iconID = Log.getIconID(priority);

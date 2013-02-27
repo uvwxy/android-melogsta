@@ -165,27 +165,21 @@ public class Log {
 		} else {
 			switch (priority) {
 			case android.util.Log.ASSERT:
-				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogWTF().logHistory.size());
 				logHistoryList.addAll(Log.getLogWTF().logHistory);
 				break;
 			case android.util.Log.DEBUG:
-				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogD().logHistory.size());
 				logHistoryList.addAll(Log.getLogD().logHistory);
 				break;
 			case android.util.Log.ERROR:
-				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogE().logHistory.size());
 				logHistoryList.addAll(Log.getLogE().logHistory);
 				break;
 			case android.util.Log.INFO:
-				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogI().logHistory.size());
 				logHistoryList.addAll(Log.getLogI().logHistory);
 				break;
 			case android.util.Log.VERBOSE:
-				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogV().logHistory.size());
 				logHistoryList.addAll(Log.getLogV().logHistory);
 				break;
 			case android.util.Log.WARN:
-				android.util.Log.i("MELOGSTA", "Log Size: " + Log.getLogW().logHistory.size());
 				logHistoryList.addAll(Log.getLogW().logHistory);
 				break;
 			default:
@@ -208,13 +202,11 @@ public class Log {
 			LogNotification.notify(ctx, combinedNotification ? LogTypeState.sharedNotificationID
 					: lts.ownNotificationID, priority, tag, msg);
 		}
+
 		if (lts.logHistory != null && lts.logToHistory) {
-			android.util.Log.i("MELOGSTA", "adding (" + priority + ") " + tag + ", " + msg);
 			lts.logHistory.add(new LogHistoryItem(priority, tag, msg, System.currentTimeMillis(), tr));
-		} else {
-			android.util.Log.i("MELOGSTA", "LogHistory is null? = " + (lts.logHistory == null) + "priority = "
-					+ priority);
 		}
+
 		if (lts.logToLogCat)
 			return android.util.Log.println(priority, tag, msg);
 		return 0;

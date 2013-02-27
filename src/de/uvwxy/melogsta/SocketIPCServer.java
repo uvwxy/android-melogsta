@@ -18,7 +18,6 @@ public class SocketIPCServer implements Runnable {
 		try {
 			server = new LocalServerSocket(SOCKET_ADDRESS_PREFIX + "" + pid);
 		} catch (IOException e) {
-			android.util.Log.i("MELOGSTA", "SOCKET IPC SERVER FAILED");
 			e.printStackTrace();
 		}
 	}
@@ -32,9 +31,7 @@ public class SocketIPCServer implements Runnable {
 		while (running) {
 			DataInputStream input = null;
 			try {
-				android.util.Log.i("MELOGSTA", "SocketIPCServer waiting for client");
 				receiver = server.accept();
-				android.util.Log.i("MELOGSTA", "SocketIPCServer client connected");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -44,21 +41,16 @@ public class SocketIPCServer implements Runnable {
 				try {
 					input = new DataInputStream(receiver.getInputStream());
 					prio = input.readInt();
-					android.util.Log.i("MELOGSTA", "SocketIPCServer read prio");
 
 					ObjectOutputStream output = new ObjectOutputStream(receiver.getOutputStream());
 					ArrayList<LogHistoryItem> logHistoryList = new ArrayList<LogHistoryItem>();
-					android.util.Log.i("MELOGSTA", "SocketIPCServer reading list for prio = " + prio);
 					Log.getLocalLog(prio, logHistoryList);
-					android.util.Log.i("MELOGSTA", "SocketIPCServer writing log list");
 					output.writeObject(logHistoryList);
-					android.util.Log.i("MELOGSTA", "SocketIPCServer writing done");
 
 					input.close();
 					output.close();
 					receiver.close();
 				} catch (IOException e) {
-					android.util.Log.i("MELOGSTA", "Server Socket write logs failed");
 					e.printStackTrace();
 				}
 
